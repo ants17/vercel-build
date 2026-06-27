@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Claude Code local session state
 .remember/
+
+# Supabase CLI scratch
+supabase/.temp/
