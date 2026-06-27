@@ -31,9 +31,9 @@ export default function Home() {
         <Link href="/showcase">
           <Card className="h-full transition-all hover:ring-foreground/20">
             <CardHeader>
-              <CardTitle>Four-persona showcase</CardTitle>
+              <CardTitle>Persona showcase</CardTitle>
               <CardDescription>
-                Run the demo handoff: persona, agents, custom BRIM storefront.
+                Run the agent handoff: persona, agents, custom BRIM storefront.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -62,7 +62,7 @@ export default function Home() {
 
       <div>
         <Button render={<Link href="/showcase" />}>
-          Run the four-persona demo
+          Open the persona showcase
           <ArrowRight data-icon="inline-end" />
         </Button>
       </div>
