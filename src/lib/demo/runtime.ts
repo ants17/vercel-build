@@ -309,6 +309,7 @@ function getSandboxCredentials():
   | { available: true; options: Record<string, string>; redacted: Record<string, string> }
   | { available: false; options: Record<string, never>; redacted: Record<string, string> } {
   const hasOidc = Boolean(process.env.VERCEL_OIDC_TOKEN);
+  const isVercelRuntime = Boolean(process.env.VERCEL || process.env.VERCEL_ENV || process.env.VERCEL_URL);
   const explicit = {
     token: process.env.VERCEL_TOKEN,
     teamId: process.env.VERCEL_TEAM_ID,
@@ -320,6 +321,7 @@ function getSandboxCredentials():
     VERCEL_TOKEN: explicit.token ? "set" : "missing",
     VERCEL_TEAM_ID: explicit.teamId ? "set" : "missing",
     VERCEL_PROJECT_ID: explicit.projectId ? "set" : "missing",
+    VERCEL_RUNTIME: isVercelRuntime ? "set" : "missing",
   };
 
   if (hasExplicit) {
@@ -330,7 +332,7 @@ function getSandboxCredentials():
     };
   }
 
-  if (hasOidc) {
+  if (hasOidc || isVercelRuntime) {
     return {
       available: true,
       options: {},
