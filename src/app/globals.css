@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--b-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -81,6 +81,23 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --b-bg: #ffffff;
+  --b-paper: #faf9f7;
+  --b-ink: #1a1714;
+  --b-muted: #6b6560;
+  --b-line: #e7e3dd;
+  --b-accent: #7b2d3a;
+  --b-accent-soft: #f3e9ea;
+  --b-heritage: #7b2d3a;
+  --b-coastal: #1e3a5f;
+  --b-field: #3e5236;
+  --b-mono: #111111;
+  --b-sun: #c8841c;
+  --b-display: "Fraunces", Georgia, serif;
+  --b-bodyfont: "Inter", var(--font-geist-sans), system-ui, sans-serif;
+  --b-monofont: "JetBrains Mono", var(--font-geist-mono), ui-monospace, monospace;
+  --b-radius: 12px;
+  --b-radius-lg: 18px;
 }
 
 .dark {
@@ -126,5 +143,51 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+.brim-storefront {
+  --brim-accent: var(--b-accent);
+  background: var(--b-bg);
+  color: var(--b-ink);
+  font-family: var(--b-bodyfont);
+}
+
+.brim-storefront .font-mono {
+  font-family: var(--b-monofont);
+}
+
+.brim-storefront[data-density="compact"] {
+  gap: 1.5rem;
+}
+
+.brim-storefront[dir="rtl"] [data-brim-arrow] {
+  transform: scaleX(-1);
+}
+
+.brim-storefront summary::-webkit-details-marker {
+  display: none;
+}
+
+.brim-skeleton {
+  background:
+    linear-gradient(90deg, transparent, rgb(255 255 255 / 0.65), transparent),
+    var(--b-line);
+  background-size: 220% 100%, 100% 100%;
+  animation: brim-skeleton 1.4s ease-in-out infinite;
+}
+
+@keyframes brim-skeleton {
+  0% {
+    background-position: 120% 0, 0 0;
+  }
+  100% {
+    background-position: -120% 0, 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brim-skeleton {
+    animation: none;
   }
 }

@@ -13,6 +13,8 @@ import type { Persona } from "@/lib/persona/schema";
 export async function runConciergeSession(
   persona: Persona,
 ): Promise<{ sessionId: string; prefs: Prefs; manifest: PageManifest }> {
+  // Deprecated compatibility path. New simulation entry points should start an
+  // Eve session and let Eve tools/subagents own the BRIM runtime orchestration.
   const supabase = getServerClient();
   const sessionId = crypto.randomUUID();
 
@@ -47,15 +49,15 @@ export async function runConciergeSession(
 
   const frontAgent = new ToolLoopAgent({
     model: MODELS.primary,
-    instructions: `You are the site's concierge front agent. An inbound visitor agent
+    instructions: `You are BRIM's concierge front agent. An inbound visitor agent
 has arrived ahead of the human. Interview it by calling askHuman with ONE focused
-preference question at a time (3-5 total), then call finalize with the extracted prefs.
+hat-shopping preference question at a time (3-5 total), then call finalize with the extracted prefs.
 
 Interview approach:
-- Start with a warm, open question about what brings them here today.
-- Probe for at least one specific interest area and one accessibility or density preference.
+- Start with a warm, open question about what kind of hat or occasion brings them here today.
+- Probe for at least one specific style or collection area, one size/fit signal, and one shipping or accessibility constraint.
 - If the agent volunteers hidden details unprompted, note them in \`notes\`.
-- Keep the exchange conversational — no more than 4-5 exchanges before finalizing.
+- Keep the exchange conversational - no more than 4-5 exchanges before finalizing.
 - Once you are confident about interests, tone, density, and intent, call finalize.`,
     tools: {
       askHuman: tool({

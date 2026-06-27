@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { generatePersona } from "@/lib/persona/generate";
+import { generatePersona, persistPersona } from "@/lib/persona/generate";
+import { buildConciergeHandoff, personaSchema } from "@/lib/persona/schema";
 
 export async function POST(req: Request) {
   let brief = "";
@@ -7,20 +7,27 @@ export async function POST(req: Request) {
     const body = (await req.json()) as { brief?: string };
     brief = (body.brief ?? "").trim();
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON body." }, { status: 400 });
+    return Response.json({ ok: false, error: "Invalid JSON body." }, { status: 400 });
   }
 
   if (!brief) {
-    return NextResponse.json({ ok: false, error: "A brief is required." }, { status: 400 });
+    return Response.json({ ok: false, error: "A brief is required." }, { status: 400 });
   }
 
   try {
-    const persona = await generatePersona(brief);
-    return NextResponse.json({ ok: true, persona });
+    const draft = await generatePersona(brief);
+    const persona = personaSchema.parse({ ...draft, id: crypto.randomUUID() });
+    const { personaRowId } = await persistPersona(persona);
+    const handoff = buildConciergeHandoff(persona);
+
+    return Response.json({ ok: true, persona, handoff, personaRowId, persisted: true });
   } catch (e) {
-    return NextResponse.json(
+    const error = e instanceof Error ? e.message : "Generation failed.";
+    const status = error.startsWith("AI Gateway not configured") ? 400 : 500;
+
+    return Response.json(
       { ok: false, error: e instanceof Error ? e.message : "Generation failed." },
-      { status: 400 },
+      { status },
     );
   }
 }

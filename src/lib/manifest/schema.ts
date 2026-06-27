@@ -8,24 +8,35 @@ import { z } from "zod";
 
 export const COMPONENT_KINDS = [
   "hero",
-  "featureGrid",
-  "pricingTable",
-  "testimonialList",
+  "filterBar",
+  "productList",
   "faqAccordion",
   "ctaBanner",
-  "richText",
   "statCallout",
+  "testimonial",
 ] as const;
 
 export const componentKindSchema = z.enum(COMPONENT_KINDS);
 export type ComponentKind = z.infer<typeof componentKindSchema>;
 
-export const THEME_PRESETS = ["minimal", "editorial", "vibrant", "corporate"] as const;
+export const BRIM_ACCENTS = ["heritage", "coastal", "field", "mono", "sun"] as const;
+
+export const BRIM_ACCENT_COLORS = {
+  heritage: "#7B2D3A",
+  coastal: "#1E3A5F",
+  field: "#3E5236",
+  mono: "#111111",
+  sun: "#C8841C",
+} as const satisfies Record<(typeof BRIM_ACCENTS)[number], string>;
+
+export const THEME_PRESETS = BRIM_ACCENTS;
 
 export const themeSchema = z.object({
-  preset: z.enum(THEME_PRESETS).default("minimal"),
-  accentColor: z.string().default("#6366f1"),
+  preset: z.enum(THEME_PRESETS).default("heritage"),
+  accent: z.enum(BRIM_ACCENTS).optional(),
+  accentColor: z.string().optional(),
   density: z.enum(["compact", "comfortable"]).default("comfortable"),
+  direction: z.enum(["ltr", "rtl"]).default("ltr"),
 });
 export type Theme = z.infer<typeof themeSchema>;
 

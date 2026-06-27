@@ -27,11 +27,21 @@ export default function Home() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <Link href="/showcase">
+          <Card className="h-full transition-all hover:ring-foreground/20">
+            <CardHeader>
+              <CardTitle>Four-persona showcase</CardTitle>
+              <CardDescription>
+                Run the demo handoff: persona, agents, custom BRIM storefront.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
         <Link href="/persona">
           <Card className="h-full transition-all hover:ring-foreground/20">
             <CardHeader>
-              <CardTitle>Persona Studio →</CardTitle>
+              <CardTitle>Persona Studio</CardTitle>
               <CardDescription>
                 Develop the human your agent represents. Author or generate a persona.
               </CardDescription>
@@ -41,7 +51,7 @@ export default function Home() {
         <Link href="/demo">
           <Card className="h-full transition-all hover:ring-foreground/20">
             <CardHeader>
-              <CardTitle>Manifest demo →</CardTitle>
+              <CardTitle>Manifest demo</CardTitle>
               <CardDescription>
                 See a page rendered live from a declarative manifest + component registry.
               </CardDescription>
@@ -51,8 +61,8 @@ export default function Home() {
       </div>
 
       <div>
-        <Button render={<Link href="/persona" />}>
-          Start with a persona
+        <Button render={<Link href="/showcase" />}>
+          Run the four-persona demo
           <ArrowRight data-icon="inline-end" />
         </Button>
       </div>

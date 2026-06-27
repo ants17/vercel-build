@@ -37,12 +37,19 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Eve generated local state
+.eve/
+.output/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
 # Claude Code local session state
+.claude/
 .remember/
+.playwright-mcp/
+video/
 
 # Supabase CLI scratch
 supabase/.temp/

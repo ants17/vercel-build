@@ -15,8 +15,10 @@ import type { Prefs } from "@/agents/front";
 export const uiPlanSchema = z.object({
   theme: z.object({
     preset: z.enum(THEME_PRESETS),
-    accentColor: z.string().describe("Hex color, e.g. #6366f1"),
+    accent: z.enum(THEME_PRESETS).optional(),
+    accentColor: z.string().optional().describe("Hex color, e.g. #7B2D3A"),
     density: z.enum(["compact", "comfortable"]),
+    direction: z.enum(["ltr", "rtl"]).default("ltr"),
   }),
   sections: z.array(sectionSchema).min(3).max(6),
 });
@@ -30,28 +32,26 @@ export type UiPlan = z.infer<typeof uiPlanSchema>;
 export async function runUiAgent(prefs: Prefs): Promise<UiPlan> {
   const { output } = await generateText({
     model: MODELS.worker,
-    instructions: `You are a UI architect designing a personalized landing page for a specific visitor.
+    instructions: `You are a UI architect designing a personalized BRIM hat storefront for a specific shopper.
 
-Your job is to choose the best 3–6 sections and write REAL, persona-tailored content in every section's props.
+Your job is to choose the best 3-6 BRIM sections and write REAL, shopper-tailored content in every section's props.
 
-RULES — follow exactly:
+RULES - follow exactly:
 1. Always start with a "hero" section.
 2. End with a "ctaBanner" when it fits the intent; otherwise end with whichever section closes the story best.
 3. For EVERY section you output, fill ALL non-optional props with specific, compelling copy tailored to the visitor's intent, interests, and tone. NEVER leave a required field empty or set it to a placeholder.
 4. Component-specific requirements:
-   - hero: write a compelling headline, a 1-2 sentence subheadline, and a ctaLabel that matches their goal.
-   - featureGrid: write 3 features, each with a short title and 1-2 sentence body that speaks to the visitor's interests.
-   - pricingTable: write 2-3 plans with realistic names, prices, periods, and 3-5 features each; mark one as highlighted.
-   - testimonialList: write 2-3 testimonials with believable quotes, author names, and roles relevant to the visitor's domain.
-   - faqAccordion: write 3-5 questions the visitor would actually ask, with thorough answers.
-   - ctaBanner: write a punchy headline and ctaLabel that closes the page with urgency.
-   - richText: write a substantive body (at least 2 paragraphs separated by a blank line) relevant to the visitor's topic.
-   - statCallout: write 3-5 stats with concrete label/value pairs that are meaningful for the visitor's interests.
-5. Choose a theme preset and accent color that matches the visitor's tone:
-   - formal/corporate → "corporate" or "editorial", neutral accent
-   - casual/playful → "vibrant" or "minimal", bright accent
-6. Match density: compact → pick denser sections (hero + featureGrid + ctaBanner); comfortable → add richText, testimonials, or stats for breathing room.`,
-    prompt: `Design a personalized page for a visitor with the following preferences:
+   - hero: write an editorial hat-shopping headline, subheadline, optional primaryCta/secondaryCta, and an optional product image.
+   - filterBar: use hat categories such as All, Fedoras, Caps, Beanies, Straw, Kids, or Gift.
+   - productList: include ready/partial/skeleton product cards with names, prices, descriptions, imageUrl when known, sizes, colors, and ctaLabel where ready.
+   - statCallout: write 1-4 concrete BRIM fit, shipping, or catalog stats.
+   - testimonial: write one believable shopper quote with author and optional place.
+   - faqAccordion: write 3-5 fit, shipping, return, sizing, or gift questions the shopper would ask.
+   - ctaBanner: write headline/body and cta.label that closes the page.
+5. Use only BRIM theme presets: "heritage", "coastal", "field", "mono", "sun".
+6. Set direction to "rtl" only if the shopper language is Arabic; otherwise use "ltr".
+7. Match density: compact -> prefer hero + filterBar + productList + ctaBanner; comfortable -> add stats, testimonial, or FAQ for breathing room.`,
+    prompt: `Design a personalized BRIM hat storefront for a shopper with the following preferences:
 
 Intent: ${prefs.intent}
 Interests: ${prefs.interests.join(", ")}
@@ -59,7 +59,7 @@ Tone: ${prefs.tone}
 Density: ${prefs.density}
 ${prefs.notes ? `Notes: ${prefs.notes}` : ""}
 
-Return a UI plan with theme and sections. Every section must have fully written, specific props — do not use placeholder text.`,
+Return a UI plan with theme and sections. Every section must have fully written, specific props - do not use placeholder text.`,
     output: Output.object({ schema: uiPlanSchema }),
   });
 

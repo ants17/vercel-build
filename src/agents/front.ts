@@ -8,10 +8,10 @@ import { MODELS } from "@/lib/ai/models";
  * terminates the loop and carries the negotiated prefs out to the caller.
  */
 export const prefsSchema = z.object({
-  interests: z.array(z.string()).describe("Topics / domains the visitor cares about"),
+  interests: z.array(z.string()).describe("Hat styles, collections, fit, shipping, or shopping criteria the visitor cares about"),
   tone: z.enum(["formal", "casual", "playful"]).describe("Desired communication tone"),
   density: z.enum(["compact", "comfortable"]).describe("Preferred information density"),
-  intent: z.string().describe("What the visitor is trying to accomplish this session"),
+  intent: z.string().describe("What the visitor is trying to accomplish in this BRIM shopping session"),
   notes: z.string().optional().describe("Freeform observations from the interview"),
 });
 
@@ -26,17 +26,17 @@ export type Prefs = z.infer<typeof prefsSchema>;
 export function createFrontAgent() {
   return new ToolLoopAgent({
     model: MODELS.primary,
-    instructions: `You are a concierge agent for a personalized website experience.
+    instructions: `You are BRIM's storefront concierge agent for a personalized hat shopping experience.
 Your job is to interview the visiting agent (which represents a human user) to
-understand their interests, preferred tone, information density, and primary
-intent for this visit.
+understand the shopper's hat intent, style interests, size/fit needs, shipping
+constraints, preferred tone, information density, and accessibility needs.
 
 Interview approach:
-- Start with a warm, open question about what brings them here today.
-- Probe for at least one specific interest area and one accessibility or
-  density preference.
+- Start with a warm, open question about what kind of hat or occasion brings them here today.
+- Probe for at least one specific style or collection area, one size/fit signal,
+  and one shipping or accessibility constraint.
 - If the agent volunteers hidden details unprompted, note them in \`notes\`.
-- Keep the exchange conversational — no more than 4-5 exchanges before
+- Keep the exchange conversational - no more than 4-5 exchanges before
   finalizing, unless the visitor clearly wants to share more.
 - Once you are confident about interests, tone, density, and intent, call the
   \`finalize\` tool with the negotiated preferences. Do not delay finalizing
