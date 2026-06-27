@@ -28,6 +28,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { ComponentKind } from "./schema";
+import {
+  heroProps,
+  featureGridProps,
+  pricingTableProps,
+  testimonialListProps,
+  faqAccordionProps,
+  ctaBannerProps,
+  richTextProps,
+  statCalloutProps,
+} from "./sections";
 
 /**
  * The whitelist. Each ComponentKind maps to a zod props schema (validated at
@@ -52,12 +62,6 @@ const initials = (name: string) =>
     .toUpperCase();
 
 // --- hero ------------------------------------------------------------------
-const heroProps = z.object({
-  eyebrow: z.string().optional(),
-  headline: z.string(),
-  subheadline: z.string().optional(),
-  ctaLabel: z.string().optional(),
-});
 function Hero(p: z.infer<typeof heroProps>) {
   return (
     <section className="flex flex-col items-start gap-4 py-8">
@@ -85,12 +89,6 @@ function Hero(p: z.infer<typeof heroProps>) {
 }
 
 // --- featureGrid -----------------------------------------------------------
-const featureGridProps = z.object({
-  title: z.string().optional(),
-  features: z
-    .array(z.object({ title: z.string(), body: z.string() }))
-    .min(1),
-});
 function FeatureGrid(p: z.infer<typeof featureGridProps>) {
   return (
     <section className="flex flex-col gap-6">
@@ -112,20 +110,6 @@ function FeatureGrid(p: z.infer<typeof featureGridProps>) {
 }
 
 // --- pricingTable ----------------------------------------------------------
-const pricingTableProps = z.object({
-  title: z.string().optional(),
-  plans: z
-    .array(
-      z.object({
-        name: z.string(),
-        price: z.string(),
-        period: z.string().optional(),
-        features: z.array(z.string()),
-        highlighted: z.boolean().optional(),
-      }),
-    )
-    .min(1),
-});
 function PricingTable(p: z.infer<typeof pricingTableProps>) {
   return (
     <section className="flex flex-col gap-6">
@@ -169,19 +153,6 @@ function PricingTable(p: z.infer<typeof pricingTableProps>) {
 }
 
 // --- testimonialList -------------------------------------------------------
-const testimonialListProps = z.object({
-  title: z.string().optional(),
-  testimonials: z
-    .array(
-      z.object({
-        quote: z.string(),
-        author: z.string(),
-        role: z.string().optional(),
-        avatarUrl: z.string().optional(),
-      }),
-    )
-    .min(1),
-});
 function TestimonialList(p: z.infer<typeof testimonialListProps>) {
   return (
     <section className="flex flex-col gap-6">
@@ -214,10 +185,6 @@ function TestimonialList(p: z.infer<typeof testimonialListProps>) {
 }
 
 // --- faqAccordion ----------------------------------------------------------
-const faqAccordionProps = z.object({
-  title: z.string().optional(),
-  items: z.array(z.object({ question: z.string(), answer: z.string() })).min(1),
-});
 function FaqAccordion(p: z.infer<typeof faqAccordionProps>) {
   return (
     <section className="flex flex-col gap-6">
@@ -237,11 +204,6 @@ function FaqAccordion(p: z.infer<typeof faqAccordionProps>) {
 }
 
 // --- ctaBanner -------------------------------------------------------------
-const ctaBannerProps = z.object({
-  headline: z.string(),
-  body: z.string().optional(),
-  ctaLabel: z.string().optional(),
-});
 function CtaBanner(p: z.infer<typeof ctaBannerProps>) {
   return (
     <section
@@ -261,10 +223,6 @@ function CtaBanner(p: z.infer<typeof ctaBannerProps>) {
 }
 
 // --- richText --------------------------------------------------------------
-const richTextProps = z.object({
-  title: z.string().optional(),
-  body: z.string(),
-});
 function RichText(p: z.infer<typeof richTextProps>) {
   return (
     <section className="flex flex-col gap-4">
@@ -283,12 +241,6 @@ function RichText(p: z.infer<typeof richTextProps>) {
 }
 
 // --- statCallout -----------------------------------------------------------
-const statCalloutProps = z.object({
-  title: z.string().optional(),
-  stats: z
-    .array(z.object({ label: z.string(), value: z.string(), sub: z.string().optional() }))
-    .min(1),
-});
 function StatCallout(p: z.infer<typeof statCalloutProps>) {
   return (
     <section className="flex flex-col gap-6">
